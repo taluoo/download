@@ -29,7 +29,7 @@ function download(url) {
                     stream.on('error', err => reject(err));
                     response.pipe(stream);
                 } else {
-                    let msg = `request ${url} 响应码 ${code}`;
+                    let msg = `download() failed，Request ${url} response code ${code}`;
                     reject(new Error(msg))
                 }
             })

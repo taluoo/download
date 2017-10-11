@@ -34,12 +34,12 @@ describe('index.js', () => {
             });
             it('the downloaded file should be correct')
         });
-        describe('when reponse without 200', () => {
+        describe('when response 404', () => {
             it('should be rejected', async () => {
                 nock(testHost)
                     .get('/404')
                     .reply(404, 'response not found');
-                Download(testHost + '/404').should.be.rejected;
+                Download(testHost + '/404').should.be.rejectedWith('download() failed');
             });
         });
     });
