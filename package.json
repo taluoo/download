@@ -27,7 +27,7 @@
     "nock": "^9.0.22"
   },
   "dependencies": {
-    "@taluoo/tmpfile": "^1.0.0",
+    "@taluoo/tmpfile": "^1.0.1",
     "request": "^2.83.0"
   }
 }
