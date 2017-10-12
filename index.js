@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const Request = require('request');
-const makeTmpFile = require('@taluoo/tmpfile').makeTmpFile;
+const makeTmpFileSync = require('@taluoo/tmpfile').makeTmpFileSync;
 
 /**
  * 下载
@@ -17,13 +17,13 @@ function download(url) {
         };
 
         Request.get(url, options)
-            .on('response', async response => {
+            .on('response', response => {
                 let code = response.statusCode;
                 if (code === 200) {
                     // 不能直接 resolve response，会导致数据丢失。参见：https://github.com/request/request/issues/2696
                     // resolve(response);
                     // 解决办法：先写入到临时文件
-                    let tmpFilePath = await makeTmpFile();
+                    let tmpFilePath = makeTmpFileSync(); // 必须用同步的方式，异步方式同样会丢数据
                     let stream = fs.createWriteStream(tmpFilePath);
                     stream.on('finish', () => resolve(tmpFilePath));
                     stream.on('error', err => reject(err));
