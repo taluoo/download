@@ -6,6 +6,7 @@ const os = require('os');
 const fs = require('fs');
 
 const nock = require('nock');
+const md5 = require('@taluoo/md5');
 const deleteTmpFile = require('@taluoo/tmpfile').deleteTmpFile;
 
 describe('index.js', () => {
@@ -23,16 +24,21 @@ describe('index.js', () => {
             deleteTmpFile(await promise);
         });
         describe('when response 200 OK', () => {
-            it('should return a tmp file path', async function () {
+            it('should return a tmp file path and the downloaded file should be correct', async function () {
+                let file = __dirname + '/res/used_for_download.txt';
+                fs.existsSync(file).should.be.true;
                 nock(testHost)
                     .get('/ok')
-                    .reply(200, 'response 200 OK');
+                    .replyWithFile(200, __dirname + '/res/used_for_download.txt');
                 let tmpFilePath = await Download(testHost + '/ok');
 
                 tmpFilePath.should.be.a('string');
                 fs.existsSync(tmpFilePath).should.be.true;
+
+                let v = await md5(tmpFilePath);
+                v.should.be.equal('f100d3d220bfd1a527fcf8908fd843a1');
+                deleteTmpFile(tmpFilePath);
             });
-            it('the downloaded file should be correct')
         });
         describe('when response 404', () => {
             it('should be rejected', async () => {
