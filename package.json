@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/taluoo/download#readme",
   "devDependencies": {
+    "@taluoo/md5": "^1.0.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "mocha": "^4.0.1",
