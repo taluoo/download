@@ -3,6 +3,8 @@ const fs = require('fs');
 const Request = require('request');
 const makeTmpFileSync = require('@taluoo/tmpfile').makeTmpFileSync;
 
+const HttpError = require('./lib/HttpError');
+
 /**
  * 下载
  * @param url
@@ -30,7 +32,7 @@ function download(url) {
                     response.pipe(stream);
                 } else {
                     let msg = `download() failed，Request ${url} response code ${code}`;
-                    reject(new Error(msg))
+                    reject(new HttpError(code, msg));
                 }
             })
             .on('error', function (err) {

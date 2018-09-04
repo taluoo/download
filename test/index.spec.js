@@ -9,6 +9,8 @@ const nock = require('nock');
 const md5 = require('@taluoo/md5');
 const deleteTmpFile = require('@taluoo/tmpfile').deleteTmpFile;
 
+const HttpError = require('../lib/HttpError');
+
 describe('index.js', () => {
     it('should export a function', function () {
         Download.should.be.a('function');
@@ -45,7 +47,9 @@ describe('index.js', () => {
                 nock(testHost)
                     .get('/404')
                     .reply(404, 'response not found');
-                Download(testHost + '/404').should.be.rejectedWith('download() failed');
+                return Download(testHost + '/404')
+                    .should.be.rejectedWith(HttpError, 'download() failed')
+                    .and.should.eventually.have.property('statusCode', 404);
             });
         });
     });
